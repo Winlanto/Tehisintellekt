@@ -1,4 +1,10 @@
-let win = 5;
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+let win = 7;
 
 function minimax(position, isBotTurn) {
   if (position >= win) {
@@ -37,4 +43,77 @@ function buildTree(position, isBotTurn, step = 0) {
   }
 }
 
-buildTree(1, false);
+//buildTree(1, false);
+
+function playGame() {
+  console.log("Welcome to the game! The goal is to reach 7.");
+  console.log("You can add 1 or 2 to the current number on your turn.");
+  console.log("Choose who goes first: (1) You or (2) Bot");
+
+  let isBotTurn = false;
+  let position = 1;
+
+  function printBoard(position) {
+    let board = "";
+    for (let i = 1; i <= win; i++) {
+      board += position === i ? ` [${position}]` : ` ${i}`;
+    }
+    console.log(`Board:${board}`);
+  }
+
+  function startGame() {
+    rl.question("Enter 1 or 2: ", (first) => {
+      if (first.trim() !== "1" && first.trim() !== "2") {
+        console.log("Invalid input. Please enter 1 or 2: ");
+        startGame();
+        return;
+      }
+
+      isBotTurn = first.trim() === "2";
+      console.log(
+        `Starting position: ${position}. ${isBotTurn ? "Bot goes" : "You go"} first.`,
+      );
+      printBoard(position);
+      if (isBotTurn) {
+        setTimeout(takeTurn, 1000);
+        return;
+      }
+      takeTurn();
+    });
+  }
+
+  function takeTurn() {
+    if (position >= win) {
+      console.log(`Game over! ${isBotTurn ? "You win" : "Bot wins"}!`);
+      rl.close();
+      return;
+    }
+
+    if (isBotTurn) {
+      const botMove = botBestMove(position);
+      position += botMove;
+      console.log(`Bot adds ${botMove}. New position: ${position}`);
+      printBoard(position);
+      isBotTurn = false;
+      takeTurn();
+      return;
+    }
+
+    rl.question("Your turn! Enter 1 or 2: ", (input) => {
+      const num = parseInt(input.trim());
+      if (num !== 1 && num !== 2) {
+        console.log("Invalid input. Please enter 1 or 2: ");
+        takeTurn();
+        return;
+      }
+      position += num;
+      console.log(`You add ${num}. New position: ${position}`);
+      printBoard(position);
+      isBotTurn = true;
+      setTimeout(takeTurn, 1000);
+    });
+  }
+
+  startGame();
+}
+playGame();
