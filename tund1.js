@@ -74,10 +74,6 @@ function playGame() {
         `Starting position: ${position}. ${isBotTurn ? "Bot goes" : "You go"} first.`,
       );
       printBoard(position);
-      if (isBotTurn) {
-        setTimeout(takeTurn, 1000);
-        return;
-      }
       takeTurn();
     });
   }
@@ -91,16 +87,19 @@ function playGame() {
 
     if (isBotTurn) {
       const botMove = botBestMove(position);
-      position += botMove;
-      console.log(`Bot adds ${botMove}. New position: ${position}`);
-      printBoard(position);
-      isBotTurn = false;
-      takeTurn();
+      console.log(`Bot is thinking...`);
+      setTimeout(() => {
+        position += botMove;
+        console.log(`Bot adds ${botMove}. New position: ${position}`);
+        printBoard(position);
+        isBotTurn = false;
+        takeTurn();
+      }, 1000);
       return;
     }
 
     rl.question("Your turn! Enter 1 or 2: ", (input) => {
-      const num = parseInt(input.trim());
+      const num = parseInt(input.trim(), 10);
       if (num !== 1 && num !== 2) {
         console.log("Invalid input. Please enter 1 or 2: ");
         takeTurn();
@@ -110,7 +109,7 @@ function playGame() {
       console.log(`You add ${num}. New position: ${position}`);
       printBoard(position);
       isBotTurn = true;
-      setTimeout(takeTurn, 1000);
+      takeTurn();
     });
   }
 
