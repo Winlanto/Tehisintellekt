@@ -26,8 +26,8 @@ Konsoolipõhine strateegiamäng $N \times N$ ruudustikul, kus mängija võistleb
 - **Otsustamine (`minimax`, `botBestMove`):** Arvutab rekursiivselt läbi kõik võimalikud käiguteed ning valib boti jaoks parima tulemuse (1 = boti võit, 0 = inimese võit).
 - **Konsooliliides (`CLI`):** Kuvad reaalajas mängulauda (`[P]` – inimene, `[B]` – bot, `[X]` – põletatud) ja haldab käikude vaheldumist `readline` liidese kaudu.
 
-### Käivitamine
+## Käivitamine
 
 ```bash
-node isolation.js
+node file.js
 ```
