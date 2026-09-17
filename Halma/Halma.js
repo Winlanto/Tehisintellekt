@@ -104,7 +104,16 @@ function getValidMoves(board, position, isJump = false, visited = new Set()) {
   return validMoves;
 }
 
-console.log(
-  "Valid Moves:",
-  getValidMoves(readFile("sisend.txt"), startingPoint),
-);
+function printValidMoves(board, validMoves) {
+  validMoves.forEach((move) => {
+    board[move.y][move.x] = "+";
+  });
+  return board.map((row) => row.join("")).join("\n");
+}
+
+let board = readFile("sisend.txt");
+if (startingPoint) {
+  const validMoves = getValidMoves(board, startingPoint);
+  console.log("Valid moves from starting point:", validMoves);
+  console.log(printValidMoves(board, validMoves));
+}
